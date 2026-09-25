@@ -1,0 +1,34 @@
+resources:
+  jobs:
+    testing_pipeline:
+      name: testing_pipeline
+      tasks:
+        - task_key: ingest_bronze_table
+          disabled: false
+          email_notifications: {}
+          run_if: ALL_SUCCESS
+          sql_task:
+            query:
+              query_id: ccf0abaa-d2fc-40e7-b8af-d2583d05fa4e
+            warehouse_id: d44df848d1f01ab5
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: bronze_table_to_silver
+          depends_on:
+            - task_key: ingest_bronze_table
+          disabled: false
+          email_notifications: {}
+          run_if: ALL_SUCCESS
+          sql_task:
+            query:
+              query_id: f5c408c3-4b23-4618-90d3-9b62319591ac
+            warehouse_id: d44df848d1f01ab5
+          timeout_seconds: 0
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}
